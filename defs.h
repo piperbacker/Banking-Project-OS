@@ -1,4 +1,4 @@
-const int BUF_SIZE = 5;
+const int BUF_SIZE = 1024;
 
 struct parameters {
 	int loop_count;
