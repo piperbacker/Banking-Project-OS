@@ -9,7 +9,6 @@
 #include "defs.h"
 
 // see if you should move the creation of threads before if statements checking loop count = 0
-// add more details to checking for race conditions
 
 struct stats
 {
@@ -28,11 +27,7 @@ stats savings_account;
 stats th_checking[10];
 stats th_savings[10];
 
-int buffer[BUF_SIZE];
-int count = 0;
-
-sem_t buffer_access;
-extern void *banking(void *);
+//extern void *banking(void *);
 
 void *banking(void *p)
 {
@@ -195,11 +190,11 @@ void *banking(void *p)
         // To simulate what CPU instructions do for ++count
         //int reg = count;
         //++reg;
-        usleep(rand() % 200000); // to increase probability of race condition
-                                 //count = reg;
+        usleep(rand() % 100000); // to increase probability of race condition
+        //count = reg;
     }
 
-    // print final results
+    // print final results to output file and console
     file << "\nThread " << i << " stats: " << std::endl;
     file << "CHECKING BALANCE " << th_checking[i].balance << std::endl;
     file << "CHECKING DEPOSITS " << th_checking[i].no_deposits << std::endl;
