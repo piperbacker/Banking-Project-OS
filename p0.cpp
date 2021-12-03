@@ -484,6 +484,6 @@ int main(int argc, char **argv)
     }
 
     if((checking_account.balance == c_sum) && savings_account.balance == s_sum) {
-        printf("No race conditions have ocured.");
+        printf("No race conditions have occured.");
     }
 }
