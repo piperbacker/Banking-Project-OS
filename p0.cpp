@@ -47,7 +47,6 @@ void *banking(void *p)
             usleep(rand() % 200000);
             checking_account.balance = x;
             th_checking[i].balance += amount;
-            //checking_account.balance += amount;
            
             int y = checking_account.no_deposits;
             y++;
@@ -300,52 +299,52 @@ int main(int argc, char **argv)
     // pass loop_count, filename, and thread index to thread
     parameters *p1_params = new parameters;
     p1_params->loop_count = loop_count;
-    p1_params->filename = (char *)"t1_race.txt";
+    p1_params->filename = (char *)"t1.txt";
     p1_params->thr_index = 0;
 
     parameters *p2_params = new parameters;
     p2_params->loop_count = loop_count;
-    p2_params->filename = (char *)"t2_race.txt";
+    p2_params->filename = (char *)"t2.txt";
     p2_params->thr_index = 1;
 
     parameters *p3_params = new parameters;
     p3_params->loop_count = loop_count;
-    p3_params->filename = (char *)"t3_race.txt";
+    p3_params->filename = (char *)"t3.txt";
     p3_params->thr_index = 2;
 
     parameters *p4_params = new parameters;
     p4_params->loop_count = loop_count;
-    p4_params->filename = (char *)"t4_race.txt";
+    p4_params->filename = (char *)"t4.txt";
     p4_params->thr_index = 3;
 
     parameters *p5_params = new parameters;
     p5_params->loop_count = loop_count;
-    p5_params->filename = (char *)"t5_race.txt";
+    p5_params->filename = (char *)"t5.txt";
     p5_params->thr_index = 4;
 
     parameters *p6_params = new parameters;
     p6_params->loop_count = loop_count;
-    p6_params->filename = (char *)"t6_race.txt";
+    p6_params->filename = (char *)"t6.txt";
     p6_params->thr_index = 5;
 
     parameters *p7_params = new parameters;
     p7_params->loop_count = loop_count;
-    p7_params->filename = (char *)"t7_race.txt";
+    p7_params->filename = (char *)"t7.txt";
     p7_params->thr_index = 6;
 
     parameters *p8_params = new parameters;
     p8_params->loop_count = loop_count;
-    p8_params->filename = (char *)"t8_race.txt";
+    p8_params->filename = (char *)"t8.txt";
     p8_params->thr_index = 7;
 
     parameters *p9_params = new parameters;
     p9_params->loop_count = loop_count;
-    p9_params->filename = (char *)"t9_race.txt";
+    p9_params->filename = (char *)"t9.txt";
     p9_params->thr_index = 8;
 
     parameters *p10_params = new parameters;
     p10_params->loop_count = loop_count;
-    p10_params->filename = (char *)"t10_race.txt";
+    p10_params->filename = (char *)"t10.txt";
     p10_params->thr_index = 9;
 
     pthread_create(&tr1, &attr, banking, (void *)p1_params);
@@ -417,71 +416,70 @@ int main(int argc, char **argv)
     printf("SAVINGS WITHDRAWALS %d \n", s_withdrawals);
     printf("SAVINGS REJECTED TRANSACTIONS %d \n\n", s_rejected);
 
-    //printf(" %d ", c_sum);
     // check if race conditions occured in checking balance
     if (checking_account.balance != c_sum)
     {
         printf("Race conditions occured in checking account balance.\n");
         printf("Shared Checking Balance: %d\n", checking_account.balance);
         printf("Individual Sum Checking Balance: %d\n", c_sum);
-        printf("Balance Difference: %d\n\n", (checking_account.balance - c_sum));
+        printf("Balance Difference: %d\n\n", (c_sum - checking_account.balance));
     }
     // check if race conditions occured in checking no_deposits
-    else if (checking_account.no_deposits != c_deposits)
+    if (checking_account.no_deposits != c_deposits)
     {
         printf("Race conditions occured in checking account no_deposits.\n");
         printf("Shared Checking Deposits: %d\n", checking_account.no_deposits);
         printf("Individual Sum Checking Deposits: %d\n", c_deposits);
-        printf("Deposits Difference: %d\n\n", (checking_account.no_deposits - c_deposits));
+        printf("Deposits Difference: %d\n\n", (c_deposits - checking_account.no_deposits));
     }
     // check if race conditions occured in checking no_withdrawals
-    else if (checking_account.no_withdrawals != c_withdrawals)
+    if (checking_account.no_withdrawals != c_withdrawals)
     {
         printf("Race conditions occured in checking account no_withdrawals.\n");
         printf("Shared Checking Withdrawals: %d\n", checking_account.no_withdrawals);
         printf("Individual Sum Checking Withdrawals: %d\n", c_withdrawals);
-        printf("Withdrawals Difference: %d\n\n", (checking_account.no_withdrawals - c_withdrawals));
+        printf("Withdrawals Difference: %d\n\n", (c_withdrawals - checking_account.no_withdrawals));
     }
     // check if race conditions occured in checking no_rejected
-    else if (checking_account.no_rejected != c_rejected)
+    if (checking_account.no_rejected != c_rejected)
     {
         printf("Race conditions occured in checking account no_rejected.\n");
         printf("Shared Checking Rejected: %d\n", checking_account.no_rejected);
         printf("Individual Sum Checking Rejected: %d\n", c_rejected);
-        printf("Rejected Difference: %d\n\n", (checking_account.no_rejected - c_rejected));
+        printf("Rejected Difference: %d\n\n", (c_rejected - checking_account.no_rejected));
     }
 
 
     // check if race conditions occured in savings balance
-    else if (savings_account.balance != s_sum)
+    if (savings_account.balance != s_sum)
     {
         printf("Race conditions occured in savings account balance.\n");
         printf("Shared Savings Balance: %d\n", savings_account.balance);
         printf("Individual Sum Savings Balance: %d\n", s_sum);
-        printf("Balance Difference: %d\n\n", (savings_account.balance - s_sum));
+        printf("Balance Difference: %d\n\n", (s_sum - savings_account.balance));
     }
     // check if race conditions occured in savings no_deposits
-    else if (savings_account.no_deposits != s_deposits)
+    if (savings_account.no_deposits != s_deposits)
     {
         printf("Race conditions occured in savings account no_deposits.\n");
         printf("Shared Savings Deposits: %d\n", savings_account.no_deposits);
         printf("Individual Sum Savings Deposits: %d\n", s_deposits);
-        printf("Deposits Difference: %d\n\n", (savings_account.no_deposits - s_deposits));
+        printf("Deposits Difference: %d\n\n", (s_deposits - savings_account.no_deposits));
     }
     // check if race conditions occured in savings no_withdrawals
-    else if (savings_account.no_withdrawals != s_withdrawals)
+    if (savings_account.no_withdrawals != s_withdrawals)
     {
         printf("Race conditions occured in savings account no_withdrawals.\n");
         printf("Shared Savings Withdrawals: %d\n", savings_account.no_withdrawals);
         printf("Individual Sum Savings Withdrawals: %d\n", s_withdrawals);
-        printf("Withdrawals Difference: %d\n\n", (savings_account.no_withdrawals - s_withdrawals));
+        printf("Withdrawals Difference: %d\n\n", (s_withdrawals - savings_account.no_withdrawals));
     }
     // check if race conditions occured in savings no_rejected
-    else if (savings_account.no_rejected != s_rejected)
+    if (savings_account.no_rejected != s_rejected)
     {
         printf("Race conditions occured in savings account no_rejected.\n");
         printf("Shared Savings Rejected: %d\n", savings_account.no_rejected);
         printf("Individual Sum Savings Rejected: %d\n", s_rejected);
-        printf("Rejected Difference: %d\n\n", (savings_account.no_rejected - s_rejected));
+        printf("Rejected Difference: %d\n\n", (s_rejected - savings_account.no_rejected));
     }
 }
