@@ -42,10 +42,17 @@ void *banking(void *p)
         if (transaction == 1)
         {
             int amount = rand() % 100 + 50;
-            checking_account.balance += amount;
+            int x = checking_account.balance;
+            x += amount;
+            usleep(rand() % 200000);
+            checking_account.balance = x;
             th_checking[i].balance += amount;
-
-            checking_account.no_deposits++;
+            //checking_account.balance += amount;
+           
+            int y = checking_account.no_deposits;
+            y++;
+            usleep(rand() % 200000);
+            checking_account.no_deposits = y;
             th_checking[i].no_deposits++;
 
             file << "DEPOSIT CHECKING " << amount << std::endl;
@@ -57,10 +64,16 @@ void *banking(void *p)
             int amount = rand() % 100 + 50;
             if (th_checking[i].balance >= amount)
             {
-                checking_account.balance -= amount;
+                int x = checking_account.balance;
+                x -= amount;
+                usleep(rand() % 200000);
+                checking_account.balance = x;
                 th_checking[i].balance -= amount;
 
-                checking_account.no_withdrawals++;
+                int y = checking_account.no_withdrawals;
+                y++;
+                usleep(rand() % 200000);
+                checking_account.no_withdrawals = y;
                 th_checking[i].no_withdrawals++;
 
                 file << "WITHDRAWAL CHECKING " << amount << std::endl;
@@ -68,7 +81,10 @@ void *banking(void *p)
             }
             else
             {
-                checking_account.no_rejected++;
+                int y = checking_account.no_rejected;
+                y++;
+                usleep(rand() % 200000);
+                checking_account.no_rejected = y;
                 th_checking[i].no_rejected++;
 
                 file << "WITHDRAWAL CHECKING " << amount << " (REJECTED)" << std::endl;
@@ -79,10 +95,16 @@ void *banking(void *p)
         if (transaction == 3)
         {
             int amount = rand() % 150 + 100;
-            savings_account.balance += amount;
+            int x = savings_account.balance;
+            x += amount;
+            usleep(rand() % 200000);
+            savings_account.balance = x;
             th_savings[i].balance += amount;
 
-            savings_account.no_deposits++;
+            int y = savings_account.no_deposits;
+            y++;
+            usleep(rand() % 200000);
+            savings_account.no_deposits = y;
             th_savings[i].no_deposits++;
 
             file << "DEPOSIT SAVINGS " << amount << std::endl;
@@ -94,10 +116,16 @@ void *banking(void *p)
             int amount = rand() % 150 + 100;
             if (th_savings[i].balance >= amount)
             {
-                savings_account.balance -= amount;
+                int x = savings_account.balance;
+                x -= amount;
+                usleep(rand() % 200000);
+                savings_account.balance = x;
                 th_savings[i].balance -= amount;
 
-                savings_account.no_withdrawals++;
+                int y = savings_account.no_withdrawals;
+                y++;
+                usleep(rand() % 200000);
+                savings_account.no_withdrawals = y;
                 th_savings[i].no_withdrawals++;
 
                 file << "WITHDRAWAL SAVINGS " << amount << std::endl;
@@ -105,7 +133,10 @@ void *banking(void *p)
             }
             else
             {
-                savings_account.no_rejected++;
+                int x = savings_account.no_rejected;
+                x++;
+                usleep(rand() % 200000);
+                savings_account.no_rejected = x;
                 th_savings[i].no_rejected++;
 
                 file << "WITHDRAWAL SAVINGS " << amount << " (REJECTED)" << std::endl;
@@ -118,16 +149,28 @@ void *banking(void *p)
             int amount = rand() % 200 + 100;
             if (th_checking[i].balance >= amount)
             {
-                checking_account.balance -= amount;
+                int x = checking_account.balance;
+                x -= amount;
+                usleep(rand() % 200000);
+                checking_account.balance = x;
                 th_checking[i].balance -= amount;
 
-                checking_account.no_withdrawals++;
+                int y = checking_account.no_withdrawals;
+                y++;
+                usleep(rand() % 200000);
+                checking_account.no_withdrawals = y;
                 th_checking[i].no_withdrawals++;
 
-                savings_account.balance += amount;
+                int w = savings_account.balance;
+                w += amount;
+                usleep(rand() % 200000);
+                savings_account.balance = w;
                 th_savings[i].balance += amount;
 
-                savings_account.no_deposits++;
+                int z = savings_account.no_deposits;
+                z++;
+                usleep(rand() % 200000);
+                savings_account.no_deposits = z;
                 th_savings[i].no_deposits++;
 
                 file << "TRANSFER CHECKING TO SAVINGS " << amount << std::endl;
@@ -135,7 +178,10 @@ void *banking(void *p)
             }
             else
             {
-                checking_account.no_rejected++;
+                int x = checking_account.no_rejected;
+                x++;
+                usleep(rand() % 200000);
+                checking_account.no_rejected = x;
                 th_checking[i].no_rejected++;
 
                 file << "TRANSFER CHECKING TO SAVINGS " << amount << " (REJECTED)" << std::endl;
@@ -149,16 +195,28 @@ void *banking(void *p)
 
             if (th_savings[i].balance > amount)
             {
-                savings_account.balance -= amount;
+                int x = savings_account.balance;
+                x -= amount;
+                usleep(rand() % 200000);
+                savings_account.balance = x;
                 th_savings[i].balance -= amount;
 
-                savings_account.no_withdrawals++;
+                int y = savings_account.no_withdrawals;
+                y++;
+                usleep(rand() % 200000);
+                savings_account.no_withdrawals = y;
                 th_savings[i].no_withdrawals++;
 
-                checking_account.balance += amount;
+                int w = checking_account.balance;
+                w += amount;
+                usleep(rand() % 200000);
+                checking_account.balance = w;
                 th_checking[i].balance += amount;
 
-                checking_account.no_deposits++;
+                int z = checking_account.no_deposits;
+                z++;
+                usleep(rand() % 200000);
+                checking_account.no_deposits = z;
                 th_checking[i].no_deposits++;
 
                 file << "TRANSFER SAVINGS TO CHECKING " << amount << std::endl;
@@ -166,7 +224,10 @@ void *banking(void *p)
             }
             else
             {
-                savings_account.no_rejected++;
+                int x = savings_account.no_rejected;
+                x++;
+                usleep(rand() % 200000);
+                savings_account.no_rejected = x;
                 th_savings[i].no_rejected++;
 
                 file << "TRANSFER SAVINGS TO CHECKING " << amount << " (REJECTED)" << std::endl;
@@ -344,7 +405,19 @@ int main(int argc, char **argv)
         s_rejected += th_savings[i].no_rejected;
     }
 
-    printf(" %d ", c_sum);
+
+    printf("\nIndividual Sum Stats: \n");
+    printf("CHECKING BALANCE %d \n", c_sum);
+    printf("CHECKING DEPOSITS %d \n", c_deposits);
+    printf("CHECKING WITHDRAWALS %d \n", c_withdrawals);
+    printf("CHECKING REJECTED TRANSACTIONS %d \n\n", c_rejected);
+
+    printf("SAVINGS BALANCE %d \n", s_sum);
+    printf("SAVINGS DEPOSITS %d \n", s_deposits);
+    printf("SAVINGS WITHDRAWALS %d \n", s_withdrawals);
+    printf("SAVINGS REJECTED TRANSACTIONS %d \n\n", s_rejected);
+
+    //printf(" %d ", c_sum);
     // check if race conditions occured in checking balance
     if (checking_account.balance != c_sum)
     {
@@ -354,7 +427,7 @@ int main(int argc, char **argv)
         printf("Balance Difference: %d\n\n", (checking_account.balance - c_sum));
     }
     // check if race conditions occured in checking no_deposits
-    if (checking_account.no_deposits != c_deposits)
+    else if (checking_account.no_deposits != c_deposits)
     {
         printf("Race conditions occured in checking account no_deposits.\n");
         printf("Shared Checking Deposits: %d\n", checking_account.no_deposits);
@@ -362,7 +435,7 @@ int main(int argc, char **argv)
         printf("Deposits Difference: %d\n\n", (checking_account.no_deposits - c_deposits));
     }
     // check if race conditions occured in checking no_withdrawals
-    if (checking_account.no_withdrawals != c_withdrawals)
+    else if (checking_account.no_withdrawals != c_withdrawals)
     {
         printf("Race conditions occured in checking account no_withdrawals.\n");
         printf("Shared Checking Withdrawals: %d\n", checking_account.no_withdrawals);
@@ -370,7 +443,7 @@ int main(int argc, char **argv)
         printf("Withdrawals Difference: %d\n\n", (checking_account.no_withdrawals - c_withdrawals));
     }
     // check if race conditions occured in checking no_rejected
-    if (checking_account.no_rejected != c_rejected)
+    else if (checking_account.no_rejected != c_rejected)
     {
         printf("Race conditions occured in checking account no_rejected.\n");
         printf("Shared Checking Rejected: %d\n", checking_account.no_rejected);
@@ -380,7 +453,7 @@ int main(int argc, char **argv)
 
 
     // check if race conditions occured in savings balance
-    if (savings_account.balance != s_sum)
+    else if (savings_account.balance != s_sum)
     {
         printf("Race conditions occured in savings account balance.\n");
         printf("Shared Savings Balance: %d\n", savings_account.balance);
@@ -388,7 +461,7 @@ int main(int argc, char **argv)
         printf("Balance Difference: %d\n\n", (savings_account.balance - s_sum));
     }
     // check if race conditions occured in savings no_deposits
-    if (savings_account.no_deposits != s_deposits)
+    else if (savings_account.no_deposits != s_deposits)
     {
         printf("Race conditions occured in savings account no_deposits.\n");
         printf("Shared Savings Deposits: %d\n", savings_account.no_deposits);
@@ -396,7 +469,7 @@ int main(int argc, char **argv)
         printf("Deposits Difference: %d\n\n", (savings_account.no_deposits - s_deposits));
     }
     // check if race conditions occured in savings no_withdrawals
-    if (savings_account.no_withdrawals != s_withdrawals)
+    else if (savings_account.no_withdrawals != s_withdrawals)
     {
         printf("Race conditions occured in savings account no_withdrawals.\n");
         printf("Shared Savings Withdrawals: %d\n", savings_account.no_withdrawals);
@@ -404,7 +477,7 @@ int main(int argc, char **argv)
         printf("Withdrawals Difference: %d\n\n", (savings_account.no_withdrawals - s_withdrawals));
     }
     // check if race conditions occured in savings no_rejected
-    if (savings_account.no_rejected != s_rejected)
+    else if (savings_account.no_rejected != s_rejected)
     {
         printf("Race conditions occured in savings account no_rejected.\n");
         printf("Shared Savings Rejected: %d\n", savings_account.no_rejected);

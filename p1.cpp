@@ -44,14 +44,21 @@ void *banking(void *p)
         // enters critical section
         int transaction = rand() % 6 + 1;
 
-        // DEPOSIT CHECKING
+      // DEPOSIT CHECKING
         if (transaction == 1)
         {
             int amount = rand() % 100 + 50;
-            checking_account.balance += amount;
+            int x = checking_account.balance;
+            x += amount;
+            usleep(rand() % 200000);
+            checking_account.balance = x;
             th_checking[i].balance += amount;
-
-            checking_account.no_deposits++;
+            //checking_account.balance += amount;
+           
+            int y = checking_account.no_deposits;
+            y++;
+            usleep(rand() % 200000);
+            checking_account.no_deposits = y;
             th_checking[i].no_deposits++;
 
             file << "DEPOSIT CHECKING " << amount << std::endl;
@@ -63,10 +70,16 @@ void *banking(void *p)
             int amount = rand() % 100 + 50;
             if (th_checking[i].balance >= amount)
             {
-                checking_account.balance -= amount;
+                int x = checking_account.balance;
+                x -= amount;
+                usleep(rand() % 200000);
+                checking_account.balance = x;
                 th_checking[i].balance -= amount;
 
-                checking_account.no_withdrawals++;
+                int y = checking_account.no_withdrawals;
+                y++;
+                usleep(rand() % 200000);
+                checking_account.no_withdrawals = y;
                 th_checking[i].no_withdrawals++;
 
                 file << "WITHDRAWAL CHECKING " << amount << std::endl;
@@ -74,7 +87,10 @@ void *banking(void *p)
             }
             else
             {
-                checking_account.no_rejected++;
+                int y = checking_account.no_rejected;
+                y++;
+                usleep(rand() % 200000);
+                checking_account.no_rejected = y;
                 th_checking[i].no_rejected++;
 
                 file << "WITHDRAWAL CHECKING " << amount << " (REJECTED)" << std::endl;
@@ -85,10 +101,16 @@ void *banking(void *p)
         if (transaction == 3)
         {
             int amount = rand() % 150 + 100;
-            savings_account.balance += amount;
+            int x = savings_account.balance;
+            x += amount;
+            usleep(rand() % 200000);
+            savings_account.balance = x;
             th_savings[i].balance += amount;
 
-            savings_account.no_deposits++;
+            int y = savings_account.no_deposits;
+            y++;
+            usleep(rand() % 200000);
+            savings_account.no_deposits = y;
             th_savings[i].no_deposits++;
 
             file << "DEPOSIT SAVINGS " << amount << std::endl;
@@ -100,10 +122,16 @@ void *banking(void *p)
             int amount = rand() % 150 + 100;
             if (th_savings[i].balance >= amount)
             {
-                savings_account.balance -= amount;
+                int x = savings_account.balance;
+                x -= amount;
+                usleep(rand() % 200000);
+                savings_account.balance = x;
                 th_savings[i].balance -= amount;
 
-                savings_account.no_withdrawals++;
+                int y = savings_account.no_withdrawals;
+                y++;
+                usleep(rand() % 200000);
+                savings_account.no_withdrawals = y;
                 th_savings[i].no_withdrawals++;
 
                 file << "WITHDRAWAL SAVINGS " << amount << std::endl;
@@ -111,7 +139,10 @@ void *banking(void *p)
             }
             else
             {
-                savings_account.no_rejected++;
+                int x = savings_account.no_rejected;
+                x++;
+                usleep(rand() % 200000);
+                savings_account.no_rejected = x;
                 th_savings[i].no_rejected++;
 
                 file << "WITHDRAWAL SAVINGS " << amount << " (REJECTED)" << std::endl;
@@ -124,16 +155,28 @@ void *banking(void *p)
             int amount = rand() % 200 + 100;
             if (th_checking[i].balance >= amount)
             {
-                checking_account.balance -= amount;
+                int x = checking_account.balance;
+                x -= amount;
+                usleep(rand() % 200000);
+                checking_account.balance = x;
                 th_checking[i].balance -= amount;
 
-                checking_account.no_withdrawals++;
+                int y = checking_account.no_withdrawals;
+                y++;
+                usleep(rand() % 200000);
+                checking_account.no_withdrawals = y;
                 th_checking[i].no_withdrawals++;
 
-                savings_account.balance += amount;
+                int w = savings_account.balance;
+                w += amount;
+                usleep(rand() % 200000);
+                savings_account.balance = w;
                 th_savings[i].balance += amount;
 
-                savings_account.no_deposits++;
+                int z = savings_account.no_deposits;
+                z++;
+                usleep(rand() % 200000);
+                savings_account.no_deposits = z;
                 th_savings[i].no_deposits++;
 
                 file << "TRANSFER CHECKING TO SAVINGS " << amount << std::endl;
@@ -141,11 +184,11 @@ void *banking(void *p)
             }
             else
             {
-                checking_account.no_rejected++;
+                int x = checking_account.no_rejected;
+                x++;
+                usleep(rand() % 200000);
+                checking_account.no_rejected = x;
                 th_checking[i].no_rejected++;
-
-                //savings_account.no_rejected++;
-                //th_savings[i].no_rejected++;
 
                 file << "TRANSFER CHECKING TO SAVINGS " << amount << " (REJECTED)" << std::endl;
                 printf("TRANSFER CHECKING TO SAVINGS %d (REJECTED) \n", amount);
@@ -156,18 +199,30 @@ void *banking(void *p)
         {
             int amount = rand() % 200 + 100;
 
-            if (th_savings[i].balance >= amount)
+            if (th_savings[i].balance > amount)
             {
-                savings_account.balance -= amount;
+                int x = savings_account.balance;
+                x -= amount;
+                usleep(rand() % 200000);
+                savings_account.balance = x;
                 th_savings[i].balance -= amount;
 
-                savings_account.no_withdrawals++;
+                int y = savings_account.no_withdrawals;
+                y++;
+                usleep(rand() % 200000);
+                savings_account.no_withdrawals = y;
                 th_savings[i].no_withdrawals++;
 
-                checking_account.balance += amount;
+                int w = checking_account.balance;
+                w += amount;
+                usleep(rand() % 200000);
+                checking_account.balance = w;
                 th_checking[i].balance += amount;
 
-                checking_account.no_deposits++;
+                int z = checking_account.no_deposits;
+                z++;
+                usleep(rand() % 200000);
+                checking_account.no_deposits = z;
                 th_checking[i].no_deposits++;
 
                 file << "TRANSFER SAVINGS TO CHECKING " << amount << std::endl;
@@ -175,20 +230,20 @@ void *banking(void *p)
             }
             else
             {
-                savings_account.no_rejected++;
+                int x = savings_account.no_rejected;
+                x++;
+                usleep(rand() % 200000);
+                savings_account.no_rejected = x;
                 th_savings[i].no_rejected++;
 
                 file << "TRANSFER SAVINGS TO CHECKING " << amount << " (REJECTED)" << std::endl;
                 printf("TRANSFER SAVINGS TO CHECKING %d (REJECTED) \n", amount);
             }
         }
-        // leaves critical section
-
+        
         usleep(rand() % 200000); // to increase probability of race condition
-
-		/* Release mutex lock and full semaphore */
-		//pthread_mutex_unlock(&mutex);
     }
+        
 
     // print final results to output file and console
     file << "\nThread " << i << " stats: " << std::endl;
@@ -337,12 +392,6 @@ int main(int argc, char **argv)
     printf("SAVINGS WITHDRAWALS %d \n", savings_account.no_withdrawals);
     printf("SAVINGS REJECTED TRANSACTIONS %d \n\n", savings_account.no_rejected);
 
-
-    /*for (int i = 0; i < 10; i++) {
-        printf(" %d ", th_checking[i].balance);
-
-    }*/
-
     // checking for race conditions
     int c_sum = 0;
     int c_deposits = 0;
@@ -366,6 +415,17 @@ int main(int argc, char **argv)
         s_withdrawals += th_savings[i].no_withdrawals;
         s_rejected += th_savings[i].no_rejected;
     }
+
+    printf("\nIndividual Sum Stats: \n");
+    printf("CHECKING BALANCE %d \n", c_sum);
+    printf("CHECKING DEPOSITS %d \n", c_deposits);
+    printf("CHECKING WITHDRAWALS %d \n", c_withdrawals);
+    printf("CHECKING REJECTED TRANSACTIONS %d \n\n", c_rejected);
+
+    printf("SAVINGS BALANCE %d \n", s_sum);
+    printf("SAVINGS DEPOSITS %d \n", s_deposits);
+    printf("SAVINGS WITHDRAWALS %d \n", s_withdrawals);
+    printf("SAVINGS REJECTED TRANSACTIONS %d \n\n", s_rejected);
 
     // check if race conditions occured in checking balance
     if (checking_account.balance != c_sum)
