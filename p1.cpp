@@ -2,14 +2,11 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <semaphore.h>
-#include <unistd.h>
-#include <mutex> 
+#include <unistd.h> 
 
 #include <fstream>
 
 #include "defs.h"
-
-// try to add buffer back in
 
 struct stats
 {
@@ -28,21 +25,8 @@ stats savings_account;
 stats th_checking[10];
 stats th_savings[10];
 
-//std::mutex mtx; 
-
-//int buffer[BUF_SIZE];
-//int count = 0;
-//int item_id = 700; // unique item id
-//int put_index = 0; // producer puts an item at this index
-//int get_index = 0; 
-
 // mutex to access the buffer
 pthread_mutex_t mutex;
-// counting semaphores for buffer resources
-//sem_t full; // # of items in the buffer
-//sem_t empty; // # of empty slots in the buffer
-
-//extern void *banking(void *);
 
 void *banking(void *p)
 {
@@ -50,26 +34,13 @@ void *banking(void *p)
     int loop = params->loop_count;
     int i = params->thr_index;
 
-    //sem_wait(&empty);
-    //pthread_mutex_lock(&mutex);
-
     std::ofstream file;
     file.open(params->filename);
 
     pthread_mutex_lock(&mutex);
 
-   //mtx.lock();
-
     for (int j = 0; j < loop; j++)
     {
-        /* Acquire Empty Semaphore */
-		//sem_wait(&empty);
-
-		/* Acquire mutex lock to protect buffer */
-		
-
-        //printf("Accessing thread %d \n\n", i);
-
         // enters critical section
         int transaction = rand() % 6 + 1;
 
@@ -207,26 +178,16 @@ void *banking(void *p)
                 savings_account.no_rejected++;
                 th_savings[i].no_rejected++;
 
-                //checking_account.no_rejected++;
-                //th_checking[i].no_rejected++;
-
                 file << "TRANSFER SAVINGS TO CHECKING " << amount << " (REJECTED)" << std::endl;
                 printf("TRANSFER SAVINGS TO CHECKING %d (REJECTED) \n", amount);
             }
         }
-
-        // To simulate what CPU instructions do for ++count
-        //int reg = count;
-        //++reg;
-        //usleep(rand() % 200000); // to increase probability of race condition
-        //count = reg;
-
         // leaves critical section
+
+        usleep(rand() % 200000); // to increase probability of race condition
+
 		/* Release mutex lock and full semaphore */
 		//pthread_mutex_unlock(&mutex);
-    	//sem_post(&full);
-
-		//usleep(rand() % 200000);
     }
 
     // print final results to output file and console
@@ -255,8 +216,6 @@ void *banking(void *p)
 
     pthread_mutex_unlock(&mutex);
 
-    //mtx.unlock();
-
     file.close();
     pthread_exit(0);
 }
@@ -278,8 +237,6 @@ int main(int argc, char **argv)
     }
 
     //pthread_mutex_init(&mutex, NULL);
-	//sem_init(&empty, 0, BUF_SIZE);
-	//sem_init(&full, 0, 0);
 
     // creating 10 threads
     pthread_t tr1;
@@ -380,12 +337,11 @@ int main(int argc, char **argv)
     printf("SAVINGS WITHDRAWALS %d \n", savings_account.no_withdrawals);
     printf("SAVINGS REJECTED TRANSACTIONS %d \n\n", savings_account.no_rejected);
 
-    //int sum;
 
-    for (int i = 0; i < 10; i++) {
+    /*for (int i = 0; i < 10; i++) {
         printf(" %d ", th_checking[i].balance);
 
-    }
+    }*/
 
     // checking for race conditions
     int c_sum = 0;

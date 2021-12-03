@@ -25,8 +25,6 @@ stats savings_account;
 stats th_checking[10];
 stats th_savings[10];
 
-//extern void *banking(void *);
-
 void *banking(void *p)
 {
     parameters *params = (parameters *)p;
@@ -346,6 +344,7 @@ int main(int argc, char **argv)
         s_rejected += th_savings[i].no_rejected;
     }
 
+    printf(" %d ", c_sum);
     // check if race conditions occured in checking balance
     if (checking_account.balance != c_sum)
     {
