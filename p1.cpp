@@ -494,4 +494,8 @@ int main(int argc, char **argv)
         printf("Individual Sum Savings Rejected: %d\n", s_rejected);
         printf("Rejected Difference: %d\n\n", (s_rejected - savings_account.no_rejected));
     }
+
+    if((checking_account.balance == c_sum) && savings_account.balance == s_sum) {
+        printf("No race conditions have ocured.");
+    }
 }
