@@ -8,8 +8,6 @@
 
 #include "defs.h"
 
-// see if you should move the creation of threads before if statements checking loop count = 0
-
 struct stats
 {
     int no_deposits;    // # of deposits into the account (not include if rejected)
@@ -40,9 +38,6 @@ void *banking(void *p)
 
     for (int j = 0; j < loop; j++)
     {
-
-        //while (count >= BUF_SIZE) ; // wait
-
         int transaction = rand() % 6 + 1;
 
         // DEPOSIT CHECKING
@@ -145,9 +140,6 @@ void *banking(void *p)
                 checking_account.no_rejected++;
                 th_checking[i].no_rejected++;
 
-                //savings_account.no_rejected++;
-                //th_savings[i].no_rejected++;
-
                 file << "TRANSFER CHECKING TO SAVINGS " << amount << " (REJECTED)" << std::endl;
                 printf("TRANSFER CHECKING TO SAVINGS %d (REJECTED) \n", amount);
             }
@@ -179,19 +171,12 @@ void *banking(void *p)
                 savings_account.no_rejected++;
                 th_savings[i].no_rejected++;
 
-                //checking_account.no_rejected++;
-                //th_checking[i].no_rejected++;
-
                 file << "TRANSFER SAVINGS TO CHECKING " << amount << " (REJECTED)" << std::endl;
                 printf("TRANSFER SAVINGS TO CHECKING %d (REJECTED) \n", amount);
             }
         }
-
-        // To simulate what CPU instructions do for ++count
-        //int reg = count;
-        //++reg;
-        usleep(rand() % 100000); // to increase probability of race condition
-        //count = reg;
+        
+        usleep(rand() % 200000); // to increase probability of race condition
     }
 
     // print final results to output file and console
@@ -257,52 +242,52 @@ int main(int argc, char **argv)
     parameters *p1_params = new parameters;
     p1_params->loop_count = loop_count;
     p1_params->filename = (char *)"t1_race.txt";
-    p1_params->thr_index = 1;
+    p1_params->thr_index = 0;
 
     parameters *p2_params = new parameters;
     p2_params->loop_count = loop_count;
     p2_params->filename = (char *)"t2_race.txt";
-    p2_params->thr_index = 2;
+    p2_params->thr_index = 1;
 
     parameters *p3_params = new parameters;
     p3_params->loop_count = loop_count;
     p3_params->filename = (char *)"t3_race.txt";
-    p3_params->thr_index = 3;
+    p3_params->thr_index = 2;
 
     parameters *p4_params = new parameters;
     p4_params->loop_count = loop_count;
     p4_params->filename = (char *)"t4_race.txt";
-    p4_params->thr_index = 4;
+    p4_params->thr_index = 3;
 
     parameters *p5_params = new parameters;
     p5_params->loop_count = loop_count;
     p5_params->filename = (char *)"t5_race.txt";
-    p5_params->thr_index = 5;
+    p5_params->thr_index = 4;
 
     parameters *p6_params = new parameters;
     p6_params->loop_count = loop_count;
     p6_params->filename = (char *)"t6_race.txt";
-    p6_params->thr_index = 6;
+    p6_params->thr_index = 5;
 
     parameters *p7_params = new parameters;
     p7_params->loop_count = loop_count;
     p7_params->filename = (char *)"t7_race.txt";
-    p7_params->thr_index = 7;
+    p7_params->thr_index = 6;
 
     parameters *p8_params = new parameters;
     p8_params->loop_count = loop_count;
     p8_params->filename = (char *)"t8_race.txt";
-    p8_params->thr_index = 8;
+    p8_params->thr_index = 7;
 
     parameters *p9_params = new parameters;
     p9_params->loop_count = loop_count;
     p9_params->filename = (char *)"t9_race.txt";
-    p9_params->thr_index = 9;
+    p9_params->thr_index = 8;
 
     parameters *p10_params = new parameters;
     p10_params->loop_count = loop_count;
     p10_params->filename = (char *)"t10_race.txt";
-    p10_params->thr_index = 10;
+    p10_params->thr_index = 9;
 
     pthread_create(&tr1, &attr, banking, (void *)p1_params);
     pthread_create(&tr2, &attr, banking, (void *)p2_params);

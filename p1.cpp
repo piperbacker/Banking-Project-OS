@@ -3,12 +3,13 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <unistd.h>
+#include <mutex> 
 
 #include <fstream>
 
 #include "defs.h"
 
-// see if you should move the creation of threads before if statements checking loop count = 0
+// try to add buffer back in
 
 struct stats
 {
@@ -27,11 +28,19 @@ stats savings_account;
 stats th_checking[10];
 stats th_savings[10];
 
+//std::mutex mtx; 
+
+//int buffer[BUF_SIZE];
+//int count = 0;
+//int item_id = 700; // unique item id
+//int put_index = 0; // producer puts an item at this index
+//int get_index = 0; 
+
 // mutex to access the buffer
 pthread_mutex_t mutex;
 // counting semaphores for buffer resources
-sem_t full; // # of items in the buffer
-sem_t empty; // # of empty slots in the buffer
+//sem_t full; // # of items in the buffer
+//sem_t empty; // # of empty slots in the buffer
 
 //extern void *banking(void *);
 
@@ -41,16 +50,23 @@ void *banking(void *p)
     int loop = params->loop_count;
     int i = params->thr_index;
 
+    //sem_wait(&empty);
+    //pthread_mutex_lock(&mutex);
+
     std::ofstream file;
     file.open(params->filename);
+
+    pthread_mutex_lock(&mutex);
+
+   //mtx.lock();
 
     for (int j = 0; j < loop; j++)
     {
         /* Acquire Empty Semaphore */
-		sem_wait(&empty);
+		//sem_wait(&empty);
 
 		/* Acquire mutex lock to protect buffer */
-		pthread_mutex_lock(&mutex);
+		
 
         //printf("Accessing thread %d \n\n", i);
 
@@ -169,7 +185,7 @@ void *banking(void *p)
         {
             int amount = rand() % 200 + 100;
 
-            if (th_savings[i].balance > amount)
+            if (th_savings[i].balance >= amount)
             {
                 savings_account.balance -= amount;
                 th_savings[i].balance -= amount;
@@ -202,15 +218,15 @@ void *banking(void *p)
         // To simulate what CPU instructions do for ++count
         //int reg = count;
         //++reg;
-        usleep(rand() % 200000); // to increase probability of race condition
+        //usleep(rand() % 200000); // to increase probability of race condition
         //count = reg;
 
         // leaves critical section
 		/* Release mutex lock and full semaphore */
-		pthread_mutex_unlock(&mutex);
-    	sem_post(&full);
+		//pthread_mutex_unlock(&mutex);
+    	//sem_post(&full);
 
-		usleep(rand() % 200000);
+		//usleep(rand() % 200000);
     }
 
     // print final results to output file and console
@@ -237,6 +253,10 @@ void *banking(void *p)
     printf("SAVINGS WITHDRAWALS %d \n", th_savings[i].no_withdrawals);
     printf("SAVINGS REJECTED TRANSACTIONS %d \n\n", th_savings[i].no_rejected);
 
+    pthread_mutex_unlock(&mutex);
+
+    //mtx.unlock();
+
     file.close();
     pthread_exit(0);
 }
@@ -257,9 +277,9 @@ int main(int argc, char **argv)
         exit(1);
     }
 
-    pthread_mutex_init(&mutex, NULL);
-	sem_init(&empty, 0, BUF_SIZE);
-	sem_init(&full, 0, 0);
+    //pthread_mutex_init(&mutex, NULL);
+	//sem_init(&empty, 0, BUF_SIZE);
+	//sem_init(&full, 0, 0);
 
     // creating 10 threads
     pthread_t tr1;
@@ -280,52 +300,52 @@ int main(int argc, char **argv)
     parameters *p1_params = new parameters;
     p1_params->loop_count = loop_count;
     p1_params->filename = (char *)"t1_race.txt";
-    p1_params->thr_index = 1;
+    p1_params->thr_index = 0;
 
     parameters *p2_params = new parameters;
     p2_params->loop_count = loop_count;
     p2_params->filename = (char *)"t2_race.txt";
-    p2_params->thr_index = 2;
+    p2_params->thr_index = 1;
 
     parameters *p3_params = new parameters;
     p3_params->loop_count = loop_count;
     p3_params->filename = (char *)"t3_race.txt";
-    p3_params->thr_index = 3;
+    p3_params->thr_index = 2;
 
     parameters *p4_params = new parameters;
     p4_params->loop_count = loop_count;
     p4_params->filename = (char *)"t4_race.txt";
-    p4_params->thr_index = 4;
+    p4_params->thr_index = 3;
 
     parameters *p5_params = new parameters;
     p5_params->loop_count = loop_count;
     p5_params->filename = (char *)"t5_race.txt";
-    p5_params->thr_index = 5;
+    p5_params->thr_index = 4;
 
     parameters *p6_params = new parameters;
     p6_params->loop_count = loop_count;
     p6_params->filename = (char *)"t6_race.txt";
-    p6_params->thr_index = 6;
+    p6_params->thr_index = 5;
 
     parameters *p7_params = new parameters;
     p7_params->loop_count = loop_count;
     p7_params->filename = (char *)"t7_race.txt";
-    p7_params->thr_index = 7;
+    p7_params->thr_index = 6;
 
     parameters *p8_params = new parameters;
     p8_params->loop_count = loop_count;
     p8_params->filename = (char *)"t8_race.txt";
-    p8_params->thr_index = 8;
+    p8_params->thr_index = 7;
 
     parameters *p9_params = new parameters;
     p9_params->loop_count = loop_count;
     p9_params->filename = (char *)"t9_race.txt";
-    p9_params->thr_index = 9;
+    p9_params->thr_index = 8;
 
     parameters *p10_params = new parameters;
     p10_params->loop_count = loop_count;
     p10_params->filename = (char *)"t10_race.txt";
-    p10_params->thr_index = 10;
+    p10_params->thr_index = 9;
 
     pthread_create(&tr1, &attr, banking, (void *)p1_params);
     pthread_create(&tr2, &attr, banking, (void *)p2_params);
@@ -359,6 +379,13 @@ int main(int argc, char **argv)
     printf("SAVINGS DEPOSITS %d \n", savings_account.no_deposits);
     printf("SAVINGS WITHDRAWALS %d \n", savings_account.no_withdrawals);
     printf("SAVINGS REJECTED TRANSACTIONS %d \n\n", savings_account.no_rejected);
+
+    //int sum;
+
+    for (int i = 0; i < 10; i++) {
+        printf(" %d ", th_checking[i].balance);
+
+    }
 
     // checking for race conditions
     int c_sum = 0;
