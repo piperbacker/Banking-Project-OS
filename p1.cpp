@@ -68,7 +68,7 @@ void *banking(void *p)
         else if (transaction == 2)
         {
             int amount = rand() % 100 + 50;
-            if (th_checking[i].balance >= amount)
+            if (th_checking[i].balance > amount)
             {
                 int x = checking_account.balance;
                 x -= amount;
@@ -120,7 +120,7 @@ void *banking(void *p)
         else if (transaction == 4)
         {
             int amount = rand() % 150 + 100;
-            if (th_savings[i].balance >= amount)
+            if (th_savings[i].balance > amount)
             {
                 int x = savings_account.balance;
                 x -= amount;
@@ -153,7 +153,7 @@ void *banking(void *p)
         else if (transaction == 5)
         {
             int amount = rand() % 200 + 100;
-            if (th_checking[i].balance >= amount)
+            if (th_checking[i].balance > amount)
             {
                 int x = checking_account.balance;
                 x -= amount;
@@ -247,7 +247,7 @@ void *banking(void *p)
         
 
     // print final results to output file and console
-    file << "\nThread " << i << " stats: " << std::endl;
+    file << "\nThread " << i+1 << " stats: " << std::endl;
     file << "CHECKING BALANCE " << th_checking[i].balance << std::endl;
     file << "CHECKING DEPOSITS " << th_checking[i].no_deposits << std::endl;
     file << "CHECKING WITHDRAWALS " << th_checking[i].no_withdrawals << std::endl;
@@ -259,7 +259,7 @@ void *banking(void *p)
     file << "SAVINGS REJECTED TRANSACTIONS " << th_savings[i].no_rejected << "\n"
          << std::endl;
 
-    printf("\nThread %d stats: \n", i);
+    printf("\nThread %d stats: \n", i+1);
     printf("CHECKING BALANCE %d \n", th_checking[i].balance);
     printf("CHECKING DEPOSITS %d \n", th_checking[i].no_deposits);
     printf("CHECKING WITHDRAWALS %d \n", th_checking[i].no_withdrawals);
